@@ -18,5 +18,9 @@ import { ButtonGroupModule } from 'primeng/buttongroup';
 export class LoginPageComponent {
   value: string = "";
 
+  constructor() {
+  
+    
+  }
 
 }

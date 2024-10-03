@@ -51,7 +51,11 @@ h4
 {
     background-color: transparent;
 }
-.iconCustomMargin
-{
-    margin-right: 50px;
+
+@media (width > 500px) {
+
+    .iconCustomMargin
+    {
+        margin-right: 50px;
+    }
 }

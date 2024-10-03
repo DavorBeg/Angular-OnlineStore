@@ -8,6 +8,7 @@ import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Menubar, MenubarModule } from 'primeng/menubar';
+import { ProductRepositoryService } from '../../../../Infrastructure.Layer/Repositories/Products/product-repository.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -25,10 +26,24 @@ import { Menubar, MenubarModule } from 'primeng/menubar';
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent implements OnInit {
+
+
   items: MenuItem[] | undefined = undefined;
   user: string = "User";
+
+
+  /**
+   *
+   */
+  constructor(private productRepository: ProductRepositoryService) {
+
+    
+  }
+
+
   ngOnInit(): void {
 
+    this.productRepository.GetAllProducts().subscribe();
     this.items = [
       {
         label: 'Home',
