@@ -1,0 +1,32 @@
+.gradient-background {
+    background: linear-gradient(49deg,var(--main-color),#e0e4e9,var(--secondary-color));
+    background-size: 180% 180%;
+    animation: gradient-animation 18s ease infinite;
+
+    width: 100dvw;
+    height: 100dvh;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+  }
+  
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+.LoginForm
+{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    width: 30vw; 
+    background-color: whitesmoke; 
+    height: 50%; 
+    border-radius: 10px;
+}

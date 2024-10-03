@@ -1,0 +1,57 @@
+.navigationBar
+{
+    width: 100%; 
+    background-color: var(--main-color); 
+    height: 70px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    z-index: 1;
+}
+.mainContainer
+{
+    width: 80%; 
+    background-color: white; 
+    height: auto; 
+    min-height: calc(100dvh - 70px - 30px); 
+    margin: 0px auto;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+    margin-top: 30px;
+}
+h4 
+{
+    font-size: 1rem;
+}
+::ng-deep div.p-menubar
+{
+    background-color: transparent;
+    border: 0px;
+    width: 95%;
+    margin: 0px auto;
+}
+
+@media (width >= 962px) {
+
+    ::ng-deep div.p-menuitem-content > a
+    {
+        color: white;
+    }
+}
+@media (width <= 962px) {
+
+    .mainContainer
+    {
+        width: 95%;
+    }
+}
+::ng-deep div.p-menuitem-content
+{
+    background-color: transparent;
+    transition: 0.5s ease all;
+}
+::ng-deep div.p-menuitem-content:hover
+{
+    background-color: transparent;
+}
+.iconCustomMargin
+{
+    margin-right: 50px;
+}
