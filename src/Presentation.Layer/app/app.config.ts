@@ -8,6 +8,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { JwtInterceptor } from '../../Application.Layer/Interceptors/jwt-interceptor.interceptor';
 
 registerLocaleData(en);
 
@@ -20,6 +21,12 @@ export const appConfig: ApplicationConfig = {
       provide: HTTP_INTERCEPTORS,
       useClass: BaseUrlInterceptor,
       multi: true
-    }, importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient()
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient()
   ]
 };

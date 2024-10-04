@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Menubar, MenubarModule } from 'primeng/menubar';
 import { ProductRepositoryService } from '../../../../Infrastructure.Layer/Repositories/Products/product-repository.service';
+import { AuthenticationService } from '../../../../Application.Layer/Authentication/authentication-service.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -23,7 +24,8 @@ import { ProductRepositoryService } from '../../../../Infrastructure.Layer/Repos
             AvatarModule,
             ButtonModule],
   templateUrl: './main-layout.component.html',
-  styleUrl: './main-layout.component.css'
+  styleUrl: './main-layout.component.css',
+  providers: []
 })
 export class MainLayoutComponent implements OnInit {
 
@@ -35,7 +37,7 @@ export class MainLayoutComponent implements OnInit {
   /**
    *
    */
-  constructor(private productRepository: ProductRepositoryService) {
+  constructor(private productRepository: ProductRepositoryService, public authService: AuthenticationService) {
 
     
   }
@@ -55,7 +57,8 @@ export class MainLayoutComponent implements OnInit {
       },
       {
         label: 'My profile',
-        icon: 'pi pi-user'
+        icon: 'pi pi-user',
+        
       },
       {
         label: 'Bookmark',

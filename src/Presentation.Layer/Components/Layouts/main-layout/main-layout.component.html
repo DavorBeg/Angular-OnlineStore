@@ -1,6 +1,6 @@
-<body style="width:100%; min-height: 100dvh; display: flex; flex-direction: column;">    
+<body style="width:100%; min-height: 100dvh; display: flex; flex-direction: column;" class="gradient-background">    
     <div class="navigationBar">
-        <p-menubar class="customMenuBar" [model]="items">
+        <p-menubar  class="customMenuBar" [model]="items">
             <ng-template pTemplate="start">
                 <svg class="iconCustomMargin" width="33" height="35" viewBox="0 0 33 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--primary-color)" />
@@ -43,9 +43,20 @@
             </ng-template>
             <ng-template pTemplate="end">
                 <div class="flex align-items-center gap-2">
-                    <i class="pi pi-bell" style="font-size: 1.3rem; color: white; margin-right: 5px;"></i>
-                    <h4 class="m-0 m mr-2 text-white">Welcome back, {{ this.user }}</h4>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" [size]="'large'" />
+                    @if(this.authService.isAuthenticated())
+                    {
+                        
+                        <a [routerLink]="['/Login']">
+                            <i class="pi pi-bell" style="font-size: 1.3rem; color: white; margin-right: 5px;"></i>
+                        </a>
+                        <h4 class="m-0 m mr-2 text-white">Welcome back, {{ this.user }}</h4>
+                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" [size]="'large'" />
+                    }
+                    @else {
+                        <a [routerLink]="['/Login']">
+                            <i class="pi pi-sign-in" style="font-size: 1.7rem; color: white;"></i>
+                        </a>
+                    }
                 </div>
             </ng-template>
         </p-menubar>

@@ -2,12 +2,11 @@ import { Injectable, OnInit } from '@angular/core';
 import { Product } from '../../../Domain.Layer/Entities/Product.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient } from '@angular/common/http';
-import { ProductRepository } from '../../../Domain.Layer/Contracts/ProductRepository.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductRepositoryService implements ProductRepository {
+export class ProductRepositoryService {
 
   
   constructor(private http: HttpClient) { }

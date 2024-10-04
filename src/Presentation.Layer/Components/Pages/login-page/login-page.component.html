@@ -1,9 +1,30 @@
 <div class="gradient-background">
     <div class="LoginForm">
-        <p style="font-family: var(--font-family);">sdfsdfdsf</p>
-        <p-floatLabel>
-            <input pInputText id="username" [(ngModel)]="value" />
+        <div>
+            <img src="/Logo500x500.png" height="250"/>
+        </div>
+
+        <div class="flex flex-column gap-2 p-fluid" style="width: 90%;">
             <label for="username">Username</label>
-        </p-floatLabel>
+            <input 
+                pInputText 
+                id="username"
+                [value]="value" />
+        </div>
+<br />
+        <div class="flex flex-column gap-2 p-fluid" style="width: 90%;">
+            <label for="password">Password</label>
+            <input 
+                type="password"
+                pInputText 
+                id="password"
+                [value]="value" />
+        </div>
+        <p style="margin: 10px 0px; font-size: 12px;">Forgot password? <a href="">Click here</a></p>
+        <hr style="min-width: 251px; width: 90%; margin-top:15px;"/>
+
+        <div class="p-fluid" style="width: 90%;">
+            <p-button label="Login" [raised]="true"/>
+        </div>
     </div>
-</div>
+</div>  
