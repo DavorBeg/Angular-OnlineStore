@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MainLayoutComponent } from '../Components/Layouts/main-layout/main-layout.component';
+import { AuthenticationService } from '../../Application.Layer/Authentication/authentication-service.service';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,8 @@ import { MainLayoutComponent } from '../Components/Layouts/main-layout/main-layo
 })
 export class AppComponent {
   isCollapsed = false;
-  constructor()
+  constructor(private authService: AuthenticationService)
   {
-    
+    authService.changeAuthenticationState();
   }
 }

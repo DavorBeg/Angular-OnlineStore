@@ -28,7 +28,7 @@
     width: 20vw; 
     min-width: 315px;
     background-color: whitesmoke; 
-    height: 550px; 
+    min-height: 580px; 
     border-radius: 10px;
     display: flex;
     flex-direction: column;

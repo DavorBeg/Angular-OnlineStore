@@ -1,48 +1,48 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpResponseBase } from "@angular/common/http";
 import { inject, Inject, Injectable } from "@angular/core";
-import { Observable, tap } from "rxjs";
-import { AuthGuardService } from "../Authentication/auth-guard.service";
 import { AuthenticationService } from "../Authentication/authentication-service.service";
 import { Router } from "@angular/router";
-import { catchError } from "rxjs/operators";
-import { throwError } from "rxjs/internal/observable/throwError";
-import { MessageService } from "primeng/api";
+import { catchError, map, switchMap, tap } from "rxjs/operators";
+import { Observable, pipe, throwError } from "rxjs";
+import { JwtHelperService } from "@auth0/angular-jwt";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
+    constructor(private authService: AuthenticationService, private router: Router, private jwtHelper: JwtHelperService) {}
     
-    intercept(request: HttpRequest<any>, next: HttpHandler) {
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>
+    {
 
-        let authService = inject(AuthenticationService);
-        let router = inject(Router);
-
-        const token = localStorage.getItem(authService.JWT_TOKEN)
-        if(token)
-        {
+      // try to get token from localstorage
+      const token = localStorage.getItem(this.authService.JWT_TOKEN)
+      const isExpired = this.jwtHelper.isTokenExpired(token);
+      if(token)
+      {
+        if (!isExpired) {
+  
+          // if token exist I will clone given request and put it in authorization and return that modified request.
           const authorizedRequest = request.clone({
             setHeaders: { Authorization: token }
-          })
-            authService.refreshAccessToken()
-            .pipe(
-              tap(tokens => 
-                { 
-                  localStorage.setItem(authService.JWT_TOKEN, tokens.accessToken); 
-                  next.handle(request.clone({setHeaders: { Authorization: tokens.accessToken }}))
-                }),
-              catchError((error) => { 
-                return next.handle(request);
-              })
-            ).subscribe();
-
+          });
+  
           return next.handle(authorizedRequest);
+  
         }
         else
         {
-          authService.logout();
+          const isExpired = this.jwtHelper.isTokenExpired(token);
+          console.log(isExpired);
+            return this.handleTokenExpired(request, next);
         }
-
-        return next.handle(request);
+      }
+      return next.handle(request);
     }
+
+    private handleTokenExpired(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> 
+    {
+
+    }
+
     
 }

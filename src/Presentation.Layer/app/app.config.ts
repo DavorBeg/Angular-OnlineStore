@@ -9,6 +9,7 @@ import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { JwtInterceptor } from '../../Application.Layer/Interceptors/jwt-interceptor.interceptor';
+import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 registerLocaleData(en);
 
@@ -27,6 +28,8 @@ export const appConfig: ApplicationConfig = {
       useClass: JwtInterceptor,
       multi: true
     },
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    JwtHelperService,
     importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient()
   ]
 };

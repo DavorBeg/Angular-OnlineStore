@@ -1,5 +1,6 @@
+<p-toast [life]="2500" [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }" [style]="{ 'font-size': '13px'}"/>
 <div class="gradient-background">
-    <div class="LoginForm">
+    <form class="LoginForm" [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
         <div>
             <img src="/Logo500x500.png" height="250"/>
         </div>
@@ -7,24 +8,29 @@
         <div class="flex flex-column gap-2 p-fluid" style="width: 90%;">
             <label for="username">Username</label>
             <input 
-                pInputText 
-                id="username"
-                [value]="value" />
+                formControlName="username" 
+                pInputText
+                id="username"/>
+                <small class="p-error block" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.dirty">Inserted email address is not valid.</small>
         </div>
 <br />
         <div class="flex flex-column gap-2 p-fluid" style="width: 90%;">
             <label for="password">Password</label>
             <input 
+                formControlName="password"
                 type="password"
                 pInputText 
-                id="password"
-                [value]="value" />
+                id="password" />
+                <small class="p-error block" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.dirty">Password must be inserted.</small>
         </div>
         <p style="margin: 10px 0px; font-size: 12px;">Forgot password? <a href="">Click here</a></p>
         <hr style="min-width: 251px; width: 90%; margin-top:15px;"/>
 
-        <div class="p-fluid" style="width: 90%;">
-            <p-button label="Login" [raised]="true"/>
+        
+
+        <div class="p-fluid mt-1" style="width: 90%;">
+            <button pButton type="submit" label="Login" [disabled]="loginForm.invalid"></button>
         </div>
-    </div>
+
+    </form>
 </div>  
