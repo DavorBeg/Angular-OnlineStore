@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MainLayoutComponent } from '../Components/Layouts/main-layout/main-layout.component';
@@ -11,10 +11,13 @@ import { AuthenticationService } from '../../Application.Layer/Authentication/au
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   isCollapsed = false;
   constructor(private authService: AuthenticationService)
   {
-    authService.changeAuthenticationState();
+    
+  }
+  ngOnInit(): void {
+    this.authService.changeAuthenticationState();
   }
 }

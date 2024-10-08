@@ -24,7 +24,7 @@ h4
     background-color: transparent;
     border: 0px;
     width: 95%;
-    margin: 0px auto;
+    margin: 5px auto;
 }
 
 @media (width >= 962px) {
@@ -32,6 +32,7 @@ h4
     ::ng-deep div.p-menuitem-content > a
     {
         color: white;
+        
     }
 }
 @media (width <= 962px) {
@@ -39,6 +40,10 @@ h4
     .mainContainer
     {
         width: 100%;
+    }
+    ::ng-deep div.p-menubar
+    {
+        margin: 0px;
     }
 }
 ::ng-deep div.p-menuitem-content

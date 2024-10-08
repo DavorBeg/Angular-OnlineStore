@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { JwtInterceptor } from '../../Application.Layer/Interceptors/jwt-interceptor.interceptor';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { AuthGuardService } from '../../Application.Layer/Authentication/auth-guard.service';
+import { AuthenticationService } from '../../Application.Layer/Authentication/authentication-service.service';
 
 registerLocaleData(en);
 
@@ -29,7 +31,13 @@ export const appConfig: ApplicationConfig = {
       multi: true
     },
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    { provide: 'JWT_TOKEN', useValue: 'JWT_TOKEN' },
+    { provide: 'REFRESH_TOKEN', useValue: 'REFRESH_TOKEN' },
+    { provide: 'EXPIRE_IN', useValue: 30 },
     JwtHelperService,
-    importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient()
+    AuthenticationService,
+    importProvidersFrom(FormsModule), 
+    provideAnimationsAsync(), 
+    provideHttpClient()
   ]
 };

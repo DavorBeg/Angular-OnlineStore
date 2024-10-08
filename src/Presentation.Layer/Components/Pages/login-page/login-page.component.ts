@@ -36,7 +36,7 @@ export class LoginPageComponent {
     const values = this.loginForm.value;
     if(values.username && values.password)
     {
-      this.authService.login({ username: this.loginForm.get('username')?.value, password: this.loginForm.get('password')?.value, expiresInMins: this.authService.EXPIRE_IN })
+      this.authService.login({ username: this.loginForm.get('username')?.value, password: this.loginForm.get('password')?.value, expiresInMins: this.authService.EXPIRE_IN() })
       .subscribe(x => { 
         if(x) { this.router.navigate(['']); }
         else
