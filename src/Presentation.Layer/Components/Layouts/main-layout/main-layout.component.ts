@@ -56,7 +56,6 @@ export class MainLayoutComponent implements OnInit {
             this.router.navigate(['/homepage']);
             console.log("homepage");
           }
-        
         },
         {
           label: 'Store',

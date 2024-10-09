@@ -26,10 +26,9 @@ export const routes: Routes = [
             {
                 path: 'store',
                 component: StorePageComponent,
-                pathMatch: 'full'
             },
             {
-                path: "shoppingcart",
+                path: "shoppingcart/:page",
                 component: ShoppingCartComponent,
                 canActivate: [AuthGuardService]
             },

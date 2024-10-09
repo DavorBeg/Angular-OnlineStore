@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, UrlSerializer } from '@angular/router';
 
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -12,6 +12,7 @@ import { JwtInterceptor } from '../../Application.Layer/Interceptors/jwt-interce
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AuthGuardService } from '../../Application.Layer/Authentication/auth-guard.service';
 import { AuthenticationService } from '../../Application.Layer/Authentication/authentication-service.service';
+import { LowerCaseUrlSerializer } from '../../Application.Layer/Helpers/LowerCaseUrlSerializer';
 
 registerLocaleData(en);
 
@@ -34,6 +35,7 @@ export const appConfig: ApplicationConfig = {
     { provide: 'JWT_TOKEN', useValue: 'JWT_TOKEN' },
     { provide: 'REFRESH_TOKEN', useValue: 'REFRESH_TOKEN' },
     { provide: 'EXPIRE_IN', useValue: 30 },
+    { provide: UrlSerializer, useClass: LowerCaseUrlSerializer },
     JwtHelperService,
     AuthenticationService,
     importProvidersFrom(FormsModule), 

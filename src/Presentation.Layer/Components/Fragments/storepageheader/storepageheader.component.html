@@ -1,0 +1,44 @@
+<div class="mainContainer" #LargeScreen *ngIf="(this.windowWidth | async)! > 1580">
+    <div style="display: flex; align-items: center; justify-content: flex-start;">
+        <p-dropdown [options]="products" optionLabel="name" placeholder="Select a product type" [showClear]="true"
+        [style]="{'width': '15vw', 'min-width': '250px'}" class="mr-2" />
+        
+        <p-multiSelect [options]="filterBy" placeholder="Filter products by" optionLabel="displayText" display="chip"
+            [showClear]="true" [style]="{'width': '15vw', 'min-width': '250px'}" class="mr-2" />
+        
+        <p-dropdown [options]="sortBy" optionLabel="displayText" placeholder="Sort products by" [showClear]="true"
+            [style]="{'width': '15vw', 'min-width': '250px'}" />
+        
+        <p-iconField iconPosition="right">
+            <p-inputIcon styleClass="pi pi-search" class="mr-2" />
+            <input type="text" pInputText placeholder="Search" [value]="search" />
+        </p-iconField>
+    </div>
+
+    <p-button label="Refresh all" class="ml-2"/>
+</div>
+
+
+
+<div class="mainContainer" #MediumScreen *ngIf="(this.windowWidth | async)! > 670 && (this.windowWidth | async)! < 1580">
+    <div style="display: flex; align-items: center; justify-content: flex-start;">
+        <p-iconField iconPosition="right">
+            <p-inputIcon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" [value]="search" />
+        </p-iconField>
+        <p-button severity="secondary" icon="pi pi-box" [rounded]="true" [raised]="true"  class="ml-3" />
+        <p-button severity="secondary" icon="pi pi-filter" [rounded]="true" [raised]="true" class="ml-3" />
+        <p-button severity="secondary" icon="pi pi-sort" [rounded]="true" [raised]="true" class="ml-3" />
+    </div>
+    <div style="display: flex; align-items: center; justify-content: flex-start;">
+        <p-button label="Refresh all" class="ml-2"/>
+    </div>
+</div>
+
+
+
+<div class="mainContainer" #SmallScreen *ngIf="(this.windowWidth | async)! <= 670">
+    <div class="p-fluid mt-1" style="width: 100%;">
+        <button pButton icon="pi pi-filter" severity="secondary" label="Search options"></button>
+    </div>
+</div>

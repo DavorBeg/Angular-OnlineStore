@@ -16,7 +16,7 @@
                     {  
                         @if(this.user != undefined)
                         {
-                            <a [routerLink]="['/Login']">
+                            <a [routerLink]="['/login']">
                                 <i class="pi pi-sign-out" (click)="this.authService.logout()" style="font-size: 1.3rem; color: white; margin-right: 5px;"></i>
                             </a>
                             <h4 class="m-0 m mr-2 text-white">Welcome back, {{ this.user.username }}</h4>
@@ -24,7 +24,7 @@
                         }
                     }
                     @else {
-                        <a [routerLink]="['/Login']">
+                        <a [routerLink]="['/login']">
                             <p-button icon="pi pi-sign-in" [raised]="true" iconPos="right" label="Sign in" severity="primary" />
                             <!-- <i class="pi pi-sign-in" style="font-size: 1.7rem; color: white;"></i> -->
                         </a>

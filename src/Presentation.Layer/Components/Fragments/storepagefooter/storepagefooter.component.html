@@ -1,0 +1,36 @@
+<div class="mainContainer" #LargeScreen *ngIf="(this.windowWidth | async)! > 1580">
+    <div class="flex align-items-center justify-content-end">
+        <span class="mx-2 text-color">Items per page: </span>
+        <p-dropdown [options]="options" optionLabel="label" optionValue="value" [(ngModel)]="rows" (ngModelChange)="first = 0" />
+        <p-paginator [first]="first" [rows]="rows" [totalRecords]="120" (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first} - {last} of {totalRecords}" [showPageLinks]="false" [showFirstLastIcon]="false" ></p-paginator>
+    </div>
+</div>
+
+
+
+<div class="mainContainer" #MediumScreen *ngIf="(this.windowWidth | async)! > 670 && (this.windowWidth | async)! < 1580">
+    <div class="flex align-items-center justify-content-end">
+        <span class="mx-2 text-color">Items per page: </span>
+        <p-dropdown [options]="options" optionLabel="label" optionValue="value" [(ngModel)]="rows" (ngModelChange)="first = 0" />
+        <p-paginator [first]="first" [rows]="rows" [totalRecords]="120" (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true"
+            currentPageReportTemplate="{first} - {last} of {totalRecords}" [showPageLinks]="false" [showFirstLastIcon]="false" ></p-paginator>
+    </div>
+</div>
+
+
+
+<div class="mainContainer small" #SmallScreen *ngIf="(this.windowWidth | async)! <= 670">
+        <p-paginator
+        (onPageChange)="onPageChange($event)"
+        [first]="first"
+        [rows]="rows"
+        [totalRecords]="120"
+        [showCurrentPageReport]="true"
+        [showPageLinks]="false"
+        [showJumpToPageDropdown]="false"/>
+</div>
+
+
+
+
