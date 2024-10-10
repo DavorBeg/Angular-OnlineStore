@@ -5,12 +5,12 @@ import { propertyOf } from "../Others/Functions";
 
 export const sorting: SortingParameters[] = [
     {
-        displayText: 'Highest to lowest price',
+        displayText: 'Price Low To High',
         propertyName: propertyOf<Product>('price'),
         sortBy: sortBy.DESCENDING
     },
     {
-        displayText: 'Lowest to highest price',
+        displayText: 'Price High to Low',
         propertyName: propertyOf<Product>('price'),
         sortBy: sortBy.ASCENDING
     },
