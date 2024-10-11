@@ -11,7 +11,15 @@ export class PaginationService {
   private total: number = 50;
   private limit: number = 30;
 
-  public CurrentPage = () => this.skip + 1;
+  public CurrentPage = () => (this.limit > 0 && this.skip > 0) ? this.skip - this.limit : 1;
+
+  public CurrentPage2(): number
+  {
+      let result = 0;
+      result = (this.skip / this.limit) + 1;
+      return result;
+    
+  }
 
   pagination$ = new BehaviorSubject<PaginationParameters>({ skip: this.skip, limit: this.limit });
   total$ = new BehaviorSubject(this.total);
@@ -33,17 +41,17 @@ export class PaginationService {
     if(newLimit >= this.total) { this.pagination$.next({ skip: 0, limit: this.limit }); return; }
     this.pagination$.next({ skip: this.skip, limit: this.limit });
   }
+
   updatePaginationParameters(skip: number, limit: number): void
   {
 
     if(skip < 0) { throw new Error("Skip parameter cant be lower smaller 0"); }
-    if(limit > 50 || limit <= 0) { throw new Error("Limited data amount must be between 1 and 50");  }
+    if(limit > 500 || limit <= 0) { throw new Error("Limited data amount must be between 1 and 50");  }
 
     if(skip !== this.skip) { this.skip = skip; }
-    if(limit !== this.limit) { this.limit = skip; }
+    if(limit !== this.limit) { this.limit = limit; }
 
     this.pagination$.next({ skip: this.skip, limit: this.limit })
-
   }
 
   setNewTotalAmount(total: number)

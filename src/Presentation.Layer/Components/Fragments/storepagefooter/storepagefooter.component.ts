@@ -21,7 +21,7 @@ export class StorepagefooterComponent {
 
   constructor(public pagination: PaginationService)
   {
-    const defaultParams = pagination.getPaginationParameters();
+
   }
 
   options = [
@@ -38,6 +38,6 @@ export class StorepagefooterComponent {
   pageOptionsChanged(event: DropdownChangeEvent): void
   {
     this.selectedLimit = event.value;
-     this.pagination.updatePaginationLimit(this.selectedLimit);
+    this.pagination.updatePaginationParameters(this.pagination.CurrentPage() - 1, event.value);
   }
 }

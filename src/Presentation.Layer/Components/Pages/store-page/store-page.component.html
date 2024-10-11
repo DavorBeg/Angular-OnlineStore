@@ -1,4 +1,8 @@
 
-    <storepage-header [windowWidth]="this.$innerWidth" />
+    <storepage-header [windowWidth]="this.$innerWidth" (onFilterChanged)="filterChanged($event)"
+                                                       (onProductChanged)="productChanged($event)"
+                                                       (onSearchChanged)="searchChanged($event)"
+                                                       (onSortingChanged)="sortingChanged($event)"
+                                                       (onRefreshPressed)="refreshPressed()" />
     <storepage-main />
     <storepage-footer [windowWidth]="this.$innerWidth"/>

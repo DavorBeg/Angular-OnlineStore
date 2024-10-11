@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { DropdownModule } from 'primeng/dropdown';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { ProductCategory } from '../../../../Domain.Layer/Shared/Models/ProductCategory.model';
 import { ProductCategories } from '../../../../Domain.Layer/Shared/Enums/ProductCategories.enum';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -9,24 +9,26 @@ import { SortingParameters } from '../../../../Domain.Layer/Shared/Models/Sortin
 import { sorting } from '../../../../Domain.Layer/Shared/Sorting/ImplementedSorting';
 import { FilterParameters } from '../../../../Domain.Layer/Shared/Models/FilterParameters.model';
 import { filters } from '../../../../Domain.Layer/Shared/Filtering/ImplementedFilters';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { Observable } from 'rxjs';
+import { MultiSelectChangeEvent, MultiSelectModule } from 'primeng/multiselect';
+import { BehaviorSubject, debounceTime, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { ProductRepositoryService } from '../../../../Infrastructure.Layer/Repositories/Products/product-repository.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'storepage-header',
   standalone: true,
-  imports: [DropdownModule, IconFieldModule, InputIconModule, InputTextModule, MultiSelectModule, CommonModule, ButtonModule],
+  imports: [DropdownModule, IconFieldModule, InputIconModule, InputTextModule, MultiSelectModule, CommonModule, ButtonModule, FormsModule],
   templateUrl: './storepageheader.component.html',
   styleUrl: './storepageheader.component.css'
 })
-export class StorepageheaderComponent implements OnInit {
+export class StorepageheaderComponent implements OnInit, OnDestroy {
 
   @Input({ required: true }) windowWidth!: Observable<number>;
 
   products: ProductCategory[] = [];
-  selectedProductCategory: string | undefined = undefined;
+  selectedProductCategory: ProductCategory | undefined = undefined;
 
   sortBy: SortingParameters[] = sorting;
   selectedSorting: SortingParameters | undefined = undefined;
@@ -35,9 +37,28 @@ export class StorepageheaderComponent implements OnInit {
   selectedFiltering: FilterParameters[] | undefined = undefined;
 
   search: string = '';
+  private searchUpdated$ = new BehaviorSubject('');
 
-  constructor()
+  @Output() onFilterChanged = new EventEmitter<FilterParameters[]>();
+  @Output() onSortingChanged = new EventEmitter<SortingParameters>();
+  @Output() onSearchChanged = new EventEmitter<string>();
+  @Output() onProductChanged = new EventEmitter<ProductCategory>();
+  @Output() onRefreshPressed = new EventEmitter();
+
+  constructor(private productRepository: ProductRepositoryService)
   {
+      // Every 1000ms after typing emit onSearchChanged event.
+      this.searchUpdated$.pipe(debounceTime(1000)).subscribe((x) =>  { this.onSearchChanged.emit(x); console.log("search string ", x); })
+
+      this.productRepository.GetProductCategories().subscribe(
+          (value) => 
+          { 
+            this.products = [];
+            value.forEach(element => {
+              if(!this.products.includes(element)) { this.products.push(element) }
+            });
+          })
+
       const tempCategories = Object.entries(ProductCategories);
       tempCategories.forEach(entry => {
 
@@ -51,8 +72,43 @@ export class StorepageheaderComponent implements OnInit {
         }
 
       });
+
+
+  }
+  ngOnDestroy(): void {
+    this.searchUpdated$.unsubscribe();
   }
   ngOnInit(): void {
 
+  }
+
+  productChanged(event: DropdownChangeEvent): void
+  {
+    this.onProductChanged.emit(event.value);
+  }
+
+  filterChanged(event: MultiSelectChangeEvent)
+  {
+    this.onFilterChanged.emit(event.value);
+  }
+
+  filtersCleared()
+  {
+    this.onFilterChanged.emit(undefined);
+  }
+
+  sortingChanged(event: DropdownChangeEvent)
+  {
+    this.onSortingChanged.emit(event.value);
+  }
+
+  searchChanged()
+  {
+    this.searchUpdated$.next(this.search);
+  }
+
+  refreshPressed()
+  {
+    this.onRefreshPressed.emit();
   }
 }

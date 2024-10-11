@@ -2,15 +2,20 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { PaginationParameters } from "../../Domain.Layer/Shared/Models/PaginationParameters.model";
 import { FilterParameters } from "../../Domain.Layer/Shared/Models/FilterParameters.model";
 import { SortingParameters } from "../../Domain.Layer/Shared/Models/SortingParameters.model";
-import { Observable } from "rxjs";
+import { map, Observable, of } from "rxjs";
 import { Product } from "../../Domain.Layer/Entities/Product.model";
 import { PaginationService } from "../../Application.Layer/Services/pagination.service";
+import { ProductsDto } from "../../Domain.Layer/Shared/DTOs/Authentication/ProductsDto.model";
+import { filters } from "../../Domain.Layer/Shared/Filtering/ImplementedFilters";
 
 export abstract class ProductRepositoryBase 
 {
 
+    private lastFilters: FilterParameters[] | undefined = undefined;
+    private lastTotal: number = 0;
+
     constructor(protected http: HttpClient) {
-   
+
         
     }
 
@@ -60,5 +65,56 @@ export abstract class ProductRepositoryBase
         });
 
         return result;
+    }
+
+    updateFilteredTotal(filterArgs: FilterParameters[], totalAmount: number, search?: string, category?: string): Observable<number>
+    {
+        if(search !== undefined && category !== undefined) throw new Error("Function does not accept search [arg] and category [arg] in same time.")
+        if(this.FiltersAreEqual(this.lastFilters ?? [], filterArgs)) { return of(this.lastTotal) }
+        let select: string[] = [];
+        const paging: PaginationParameters = { skip: 0, limit: totalAmount } 
+        filterArgs.forEach(filter => {
+           select.push(filter.propertyName); 
+        });
+
+        this.lastFilters = filterArgs;
+        const params = this.processQueryParams(search, paging, undefined, select);
+
+        if(category)
+        {
+            return this.http.get<ProductsDto>(`products/category/${category}`, { params: params })
+            .pipe(
+                map((mappedValue) => 
+                {
+                    console.log("Values without filter: ", mappedValue.products.length);
+                    mappedValue.products = this.applyFiltersToData(mappedValue.products, filterArgs);
+                    console.log("Mapped value updated filters total:", mappedValue.products.length);
+                    this.lastTotal = mappedValue.products.length
+                    return this.lastTotal; 
+                }))
+        }
+        else
+        {
+            return this.http.get<ProductsDto>(`products/search`, { params: params })
+            .pipe(
+                map((mappedValue) => 
+                {
+                    console.log("Values without filter: ", mappedValue.products.length);
+                    mappedValue.products = this.applyFiltersToData(mappedValue.products, filterArgs);
+                    console.log("Mapped value updated filters total:", mappedValue.products.length);
+                    this.lastTotal = mappedValue.products.length
+                    return this.lastTotal; 
+                }))            
+        }
+        
+    }
+
+
+    private FiltersAreEqual(filters_a: FilterParameters[], filters_b: FilterParameters[]): boolean
+    {
+      const a = JSON.stringify(filters_a);
+      const b = JSON.stringify(filters_b);
+      return a === b ? true : false;
+  
     }
 }
