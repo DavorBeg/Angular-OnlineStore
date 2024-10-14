@@ -5,23 +5,23 @@ import { propertyOf } from "../Others/Functions";
 
 export const sorting: SortingParameters[] = [
     {
-        displayText: 'Price Low To High',
-        propertyName: propertyOf<Product>('price'),
-        sortBy: sortBy.DESCENDING
+        displaytext: 'Price Low To High',
+        propertyname: propertyOf<Product>('price'),
+        sortby: sortBy.DESCENDING
     },
     {
-        displayText: 'Price High to Low',
-        propertyName: propertyOf<Product>('price'),
-        sortBy: sortBy.ASCENDING
+        displaytext: 'Price High to Low',
+        propertyname: propertyOf<Product>('price'),
+        sortby: sortBy.ASCENDING
     },
     {
-        displayText: 'From A to Z',
-        propertyName: propertyOf<Product>('title'),
-        sortBy: sortBy.DESCENDING
+        displaytext: 'From A to Z',
+        propertyname: propertyOf<Product>('title'),
+        sortby: sortBy.DESCENDING
     },
     {
-        displayText: 'From Z to A',
-        propertyName: propertyOf<Product>('title'),
-        sortBy: sortBy.ASCENDING
+        displaytext: 'From Z to A',
+        propertyname: propertyOf<Product>('title'),
+        sortby: sortBy.ASCENDING
     },
 ];

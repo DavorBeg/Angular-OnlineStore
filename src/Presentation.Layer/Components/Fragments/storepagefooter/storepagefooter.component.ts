@@ -34,10 +34,15 @@ export class StorepagefooterComponent {
   onPageChange(event: PaginatorState): void
   {
     this.pagination.updatePaginationParameters(event.first ?? 0, event.rows ?? 0)
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+      behavior: 'instant' 
+    });
   }
   pageOptionsChanged(event: DropdownChangeEvent): void
   {
     this.selectedLimit = event.value;
-    this.pagination.updatePaginationParameters(this.pagination.CurrentPage() - 1, event.value);
+    this.pagination.updatePaginationParameters(-1, event.value);
   }
 }

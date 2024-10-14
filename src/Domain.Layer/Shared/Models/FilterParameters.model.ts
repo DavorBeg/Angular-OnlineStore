@@ -1,7 +1,7 @@
 export interface FilterParameters
 {
-    displayText: string,
-    propertyName: string,
-    valueFrom: string,
-    valueTo: string
+    displaytext: string,
+    propertyname: string,
+    valuefrom: string,
+    valueto: string
 }

@@ -3,10 +3,10 @@
         <p-dropdown [options]="products" [optionValue]="this.selectedProductCategory?.name" optionLabel="name" placeholder="Select a product type" [showClear]="true"
         [style]="{'width': '15vw', 'min-width': '250px'}" class="mr-2" (onChange)="productChanged($event)" />
         
-        <p-multiSelect [options]="filterBy" placeholder="Filter products by" optionLabel="displayText" display="chip"
+        <p-multiSelect [options]="filterBy" placeholder="Filter products by" optionLabel="displaytext" display="chip"
             [showClear]="true" [style]="{'width': '15vw', 'min-width': '250px'}" class="mr-2" (onChange)="filterChanged($event)" (onClear)="filtersCleared()"/>
         
-        <p-dropdown [options]="sortBy" optionLabel="displayText" placeholder="Sort products by" [showClear]="true" (onChange)="sortingChanged($event)"
+        <p-dropdown [options]="sortBy" optionLabel="displaytext" placeholder="Sort products by" [showClear]="true" (onChange)="sortingChanged($event)"
             [style]="{'width': '15vw', 'min-width': '250px'}" />
         
         <p-iconField iconPosition="right">

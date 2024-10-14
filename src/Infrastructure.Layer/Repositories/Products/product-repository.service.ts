@@ -23,8 +23,25 @@ export class ProductRepositoryService extends ProductRepositoryBase {
     return this.http.get<ProductCategory[]>('products/categories')
   }
 
-  GetAllProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>('products');
+  GetAllProducts(paging: PaginationParameters, filters?: FilterParameters[], sorts?: SortingParameters): Observable<ProductsDto> {
+    const params = super.processQueryParams(undefined, paging, sorts);
+    return this.http.get<ProductsDto>('products', { params: params }).pipe(
+      switchMap((value) => {
+        if(filters && filters.length > 0)
+        {
+          value.products = super.applyFiltersToData(value.products, filters);
+          return super.updateFilteredTotal(filters, value.total, undefined, undefined).pipe(map((fValue) => {
+            value.total = fValue;
+            return value;
+          }))
+        }
+        else
+        {
+          return of(value);
+        }
+
+      })
+    );
   }
 
   GetProductById(id: number): Observable<Product> {
@@ -36,7 +53,7 @@ export class ProductRepositoryService extends ProductRepositoryBase {
     return this.http.get<ProductsDto>(`products/category/${category}`, { params: params })
     .pipe(
       switchMap((value) => {
-        if(filters)
+        if(filters && filters.length > 0)
         {
 
           value.products = super.applyFiltersToData(value.products, filters);
@@ -59,11 +76,13 @@ export class ProductRepositoryService extends ProductRepositoryBase {
     return this.http.get<ProductsDto>(`products/search`, { params: params })
     .pipe(
       switchMap((value) => {
-        if(filters)
+        if(filters && filters.length > 0)
         {
-
+          console.log(filters)
+          console.log(value.products)
           value.products = super.applyFiltersToData(value.products, filters);
           return super.updateFilteredTotal(filters, value.total, searchString, undefined).pipe(map((fValue) => {
+            
             value.total = fValue;
             return value;
           }))

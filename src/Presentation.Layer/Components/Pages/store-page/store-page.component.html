@@ -4,5 +4,5 @@
                                                        (onSearchChanged)="searchChanged($event)"
                                                        (onSortingChanged)="sortingChanged($event)"
                                                        (onRefreshPressed)="refreshPressed()" />
-    <storepage-main />
+    <storepage-main [products]="(this.products$ | async)!" />
     <storepage-footer [windowWidth]="this.$innerWidth"/>

@@ -4,22 +4,22 @@ import { propertyOf } from "../Others/Functions";
 
 export const filters: FilterParameters[] = [
     {
-        displayText: "10$-50$",
-        propertyName: propertyOf<Product>('price'),
-        valueFrom: '10',
-        valueTo: '50'        
+        displaytext: "10$-50$",
+        propertyname: propertyOf<Product>('price'),
+        valuefrom: '10',
+        valueto: '50'        
     },
     {
-        displayText: "50$-100$",
-        propertyName: propertyOf<Product>('price'),
-        valueFrom: '50',
-        valueTo: '100'        
+        displaytext: "50$-100$",
+        propertyname: propertyOf<Product>('price'),
+        valuefrom: '50',
+        valueto: '100'        
     },
     {
-        displayText: "100$ +",
-        propertyName: propertyOf<Product>('price'),
-        valueFrom: '50',
-        valueTo: '9999999'        
+        displaytext: "100$ +",
+        propertyname: propertyOf<Product>('price'),
+        valuefrom: '50',
+        valueto: '9999999'        
     }
 ];
 

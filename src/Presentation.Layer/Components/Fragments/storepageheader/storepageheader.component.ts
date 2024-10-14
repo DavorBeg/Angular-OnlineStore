@@ -41,8 +41,8 @@ export class StorepageheaderComponent implements OnInit, OnDestroy {
 
   @Output() onFilterChanged = new EventEmitter<FilterParameters[]>();
   @Output() onSortingChanged = new EventEmitter<SortingParameters>();
-  @Output() onSearchChanged = new EventEmitter<string>();
   @Output() onProductChanged = new EventEmitter<ProductCategory>();
+  @Output() onSearchChanged = new EventEmitter<string>();
   @Output() onRefreshPressed = new EventEmitter();
 
   constructor(private productRepository: ProductRepositoryService)
