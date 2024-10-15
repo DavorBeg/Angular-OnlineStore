@@ -7,21 +7,21 @@ export const sorting: SortingParameters[] = [
     {
         displaytext: 'Price Low To High',
         propertyname: propertyOf<Product>('price'),
-        sortby: sortBy.DESCENDING
+        sortby: sortBy.ASCENDING
     },
     {
         displaytext: 'Price High to Low',
         propertyname: propertyOf<Product>('price'),
-        sortby: sortBy.ASCENDING
+        sortby: sortBy.DESCENDING
     },
     {
         displaytext: 'From A to Z',
         propertyname: propertyOf<Product>('title'),
-        sortby: sortBy.DESCENDING
+        sortby: sortBy.ASCENDING
     },
     {
         displaytext: 'From Z to A',
         propertyname: propertyOf<Product>('title'),
-        sortby: sortBy.ASCENDING
+        sortby: sortBy.DESCENDING
     },
 ];

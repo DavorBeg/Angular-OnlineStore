@@ -15,11 +15,14 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ProductRepositoryService } from '../../../../Infrastructure.Layer/Repositories/Products/product-repository.service';
 import { FormsModule } from '@angular/forms';
+import { CategoryDialogComponent } from "../Dialogs/category-dialog/category-dialog.component";
+import { FilteringDialogComponent } from "../Dialogs/filtering-dialog/filtering-dialog.component";
+import { SortingDialogComponent } from "../Dialogs/sorting-dialog/sorting-dialog.component";
 
 @Component({
   selector: 'storepage-header',
   standalone: true,
-  imports: [DropdownModule, IconFieldModule, InputIconModule, InputTextModule, MultiSelectModule, CommonModule, ButtonModule, FormsModule],
+  imports: [DropdownModule, IconFieldModule, InputIconModule, InputTextModule, MultiSelectModule, CommonModule, ButtonModule, FormsModule, CategoryDialogComponent, FilteringDialogComponent, SortingDialogComponent],
   templateUrl: './storepageheader.component.html',
   styleUrl: './storepageheader.component.css'
 })
@@ -34,10 +37,16 @@ export class StorepageheaderComponent implements OnInit, OnDestroy {
   selectedSorting: SortingParameters | undefined = undefined;
 
   filterBy: FilterParameters[] = filters;
-  selectedFiltering: FilterParameters[] | undefined = undefined;
+  selectedFiltering: FilterParameters[] | undefined = [];
 
   search: string = '';
-  private searchUpdated$ = new BehaviorSubject('');
+
+  private searchUpdated = new BehaviorSubject('');
+  private searchUpdated$ = this.searchUpdated.asObservable();
+
+  categoryDialogShowed: boolean = false;
+  sortingDialogShowed: boolean = false;
+  filteringDialogShowed: boolean = false;
 
   @Output() onFilterChanged = new EventEmitter<FilterParameters[]>();
   @Output() onSortingChanged = new EventEmitter<SortingParameters>();
@@ -48,7 +57,7 @@ export class StorepageheaderComponent implements OnInit, OnDestroy {
   constructor(private productRepository: ProductRepositoryService)
   {
       // Every 1000ms after typing emit onSearchChanged event.
-      this.searchUpdated$.pipe(debounceTime(1000)).subscribe((x) =>  { this.onSearchChanged.emit(x); console.log("search string ", x); })
+      this.searchUpdated$.pipe(debounceTime(500)).subscribe((x) =>  { this.onSearchChanged.emit(x); })
 
       this.productRepository.GetProductCategories().subscribe(
           (value) => 
@@ -76,7 +85,7 @@ export class StorepageheaderComponent implements OnInit, OnDestroy {
 
   }
   ngOnDestroy(): void {
-    this.searchUpdated$.unsubscribe();
+    this.searchUpdated.complete();
   }
   ngOnInit(): void {
 
@@ -104,11 +113,24 @@ export class StorepageheaderComponent implements OnInit, OnDestroy {
 
   searchChanged()
   {
-    this.searchUpdated$.next(this.search);
+    this.searchUpdated.next(this.search);
   }
 
   refreshPressed()
   {
+    this.selectedFiltering = undefined;
+    this.selectedProductCategory = undefined;
+    this.selectedSorting = undefined;
+    this.search = '';
+
     this.onRefreshPressed.emit();
+
   }
+
+  OnCategoryClick = () => this.categoryDialogShowed = !this.categoryDialogShowed;
+  OnFilteringClick = () => this.filteringDialogShowed = !this.filteringDialogShowed;
+  OnSortingClick = () => this.sortingDialogShowed = !this.sortingDialogShowed;
+
+  
+
 }

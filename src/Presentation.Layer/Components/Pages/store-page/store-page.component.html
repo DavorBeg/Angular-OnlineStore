@@ -4,5 +4,5 @@
                                                        (onSearchChanged)="searchChanged($event)"
                                                        (onSortingChanged)="sortingChanged($event)"
                                                        (onRefreshPressed)="refreshPressed()" />
-    <storepage-main [products]="(this.products$ | async)!" />
+    <storepage-main [products]="(this.products$ | async)!" [isLoading]="this.pagination.isLoading" [paginationLimit]="this.pagination.getPageLimit()"/>
     <storepage-footer [windowWidth]="this.$innerWidth"/>

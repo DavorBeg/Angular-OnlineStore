@@ -1,21 +1,26 @@
 <div class="mainContainer" #LargeScreen *ngIf="(this.windowWidth | async)! > 1580">
     <div style="display: flex; align-items: center; justify-content: flex-start;">
-        <p-dropdown [options]="products" [optionValue]="this.selectedProductCategory?.name" optionLabel="name" placeholder="Select a product type" [showClear]="true"
-        [style]="{'width': '15vw', 'min-width': '250px'}" class="mr-2" (onChange)="productChanged($event)" />
-        
-        <p-multiSelect [options]="filterBy" placeholder="Filter products by" optionLabel="displaytext" display="chip"
-            [showClear]="true" [style]="{'width': '15vw', 'min-width': '250px'}" class="mr-2" (onChange)="filterChanged($event)" (onClear)="filtersCleared()"/>
-        
-        <p-dropdown [options]="sortBy" optionLabel="displaytext" placeholder="Sort products by" [showClear]="true" (onChange)="sortingChanged($event)"
-            [style]="{'width': '15vw', 'min-width': '250px'}" />
-        
-        <p-iconField iconPosition="right">
-            <p-inputIcon styleClass="pi pi-search" class="mr-2" />
-            <input type="text" pInputText placeholder="Search" [(ngModel)]="search" (keyup)="searchChanged()"/>
-        </p-iconField>
-    </div>
 
-    <p-button label="Refresh all" class="ml-2" (onClick)="refreshPressed()"/>
+        <p-dropdown [options]="products" [optionValue]="this.selectedProductCategory?.name" [(ngModel)]="this.selectedProductCategory" optionLabel="name"
+            placeholder="Select a product type" [showClear]="true" [style]="{'min-width': '230px'}" class="mr-2"
+            (onChange)="productChanged($event)" />
+        
+        <p-multiSelect [options]="filterBy" placeholder="Filter products by" [(ngModel)]="this.selectedFiltering" optionLabel="displaytext" display="chip"
+            [showClear]="true" [style]="{'min-width': '230px'}" class="mr-2" (onChange)="filterChanged($event)"
+            (onClear)="filtersCleared()" />
+        
+        <p-dropdown [options]="sortBy" optionLabel="displaytext" [(ngModel)]="this.selectedSorting" placeholder="Sort products by" [showClear]="true"
+            (onChange)="sortingChanged($event)" [style]="{'min-width': '230px'}" />
+        
+        <div class="p-fluid">
+            <p-iconField iconPosition="right">
+                <p-inputIcon styleClass="pi pi-search" class="mr-2" />
+                <input style="max-width: 230px;" type="text" pInputText placeholder="Search" [(ngModel)]="search" (keyup)="searchChanged()"/>
+            </p-iconField>
+        </div>
+
+    </div>
+    <p-button label="Refresh all" severity="secondary" class="ml-2" (onClick)="refreshPressed()"/>
 </div>
 
 
@@ -25,19 +30,22 @@
             <p-inputIcon styleClass="pi pi-search" />
             <input type="text" pInputText placeholder="Search" [value]="search" />
         </p-iconField>
-        <p-button severity="secondary" icon="pi pi-box" [raised]="true"  class="ml-2" />
-        <p-button severity="secondary" icon="pi pi-filter" [raised]="true" class="ml-2" />
-        <p-button severity="secondary" icon="pi pi-sort" [raised]="true" class="ml-2" />
+        <p-button severity="secondary" (onClick)="OnCategoryClick()" icon="pi pi-box" [raised]="true"  class="ml-2" />
+        <p-button severity="secondary" (onClick)="OnFilteringClick()" icon="pi pi-filter" [raised]="true" class="ml-2" />
+        <p-button severity="secondary" (onClick)="OnSortingClick()" icon="pi pi-sort" [raised]="true" class="ml-2" />
     </div>
     <div style="display: flex; align-items: center; justify-content: flex-start;">
-        <p-button label="Refresh all" class="ml-2"/>
+        <p-button label="Refresh all" [raised]="true" severity="secondary" class="ml-2"/>
     </div>
 </div>
 
-
+<category-dialog [Visible]="this.categoryDialogShowed" (OnClose)="this.categoryDialogShowed = false;" [Label]="'Select a category'" ></category-dialog>
+<filtering-dialog [Visible]="this.filteringDialogShowed" [Label]="'Select a category'" ></filtering-dialog>
+<sorting-dialog [Visible]="this.sortingDialogShowed" [Label]="'Select a category'" ></sorting-dialog>
 
 <div class="mainContainer" #SmallScreen *ngIf="(this.windowWidth | async)! <= 670">
     <div class="p-fluid mt-1" style="width: 100%;">
         <button pButton icon="pi pi-filter" severity="secondary" label="Search options"></button>
     </div>
 </div>
+

@@ -1,78 +1,79 @@
 <div class="card">
     <p-dataView #dv [value]="products" [layout]="this.layout">
-            <ng-template pTemplate="list" let-products>
-                <div class="grid grid-nogutter">
-                    <div class="col-12" *ngFor="let item of products; let first = first" class="col-12">
-                        <div class="flex flex-column sm:flex-row sm:align-items-center p-4 gap-3" [ngClass]="{ 'border-top-1 surface-border': !first }">
-                            <div class="md:w-10rem relative" style="height: 100%; width: 150px; background-color: white; display:flex; justify-content: center; align-items: center; ">
-                                <img class="border-round w-full"  [src]="this.item.thumbnail" [alt]="item.title" />
-                                <p-tag [value]="getStockText(item)" [severity]="getSeverity(item)" class="absolute" [style.left.px]="4" [style.top.px]="4" />
-                            </div>
-                            <div class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4">
-                                <div class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
-                                    <div>
-                                        <span class="font-medium text-secondary text-sm">{{ item.category }}</span>
-                                        <div class="text-lg font-medium text-900 mt-2">{{ item.title }}</div>
-                                    </div>
-                                    <div class="surface-100 p-1" style="border-radius: 30px">
-                                        <div class="surface-0 flex align-items-center gap-2 justify-content-center py-1 px-2" style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
-                                            <span class="text-900 font-medium text-sm">{{ item.rating }}</span>
-                                            <i class="pi pi-star-fill text-yellow-500"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex flex-column md:align-items-end gap-5">
-                                    <span class="text-xl font-semibold text-900">{{ '$' + item.price }}</span>
-                                    <div class="flex flex-row-reverse md:flex-row gap-2">
-                                        <p-button icon="pi pi-heart" [outlined]="true" />
-                                        <p-button icon="pi pi-shopping-cart" class="flex-auto md:flex-initial white-space-nowrap" label="Buy Now" [disabled]="item.inventoryStatus === 'OUTOFSTOCK'" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
             <ng-template let-product pTemplate="grid" let-products>
                 <div class="grid grid-nogutter">
-                    <div class="col-12 sm:col-6 md:col-4 xl:col-3 p-2" *ngFor="let product of products">
-                        <div class="xl:p-3 md:p-2 sm:pd-2 border-1 surface-border surface-card border-round flex flex-column" style="height: 100%; align-items: stretch; justify-content: space-between;">
-                            <div class="surface-50 flex justify-content-center border-round p-2" style="flex-direction: column;">
-                                <div class="relative mx-auto" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                                    <div>
-                                        <img class="border-round w-full" [src]="this.product.thumbnail" [alt]="product.title" style="max-width: 300px;" />
+                    @if(!isLoading)
+                    {
+                        <div class="col-12 sm:col-6 md:col-4 xl:col-3 p-2" *ngFor="let product of products">
+                            <div class="p-4 md:p-3 sm:pd-2 border-1 surface-border surface-card border-round flex flex-column" style="height: 100%; align-items: stretch; justify-content: space-between;">
+                                <div class="surface-50 flex justify-content-center border-round p-2" style="flex-direction: column;">
+                                    <div class="relative mx-auto" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                                        <div>
+                                            <img class="border-round w-full" [src]="this.product.thumbnail" [alt]="product.title" style="max-width: 300px;" />
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; width: 100%;">
+                                        <p-tag [style]="{ 'padding': '2px 20px' }" [value]="getStockText(product)" [severity]="getSeverity(product)"></p-tag>
                                     </div>
                                 </div>
-                                <div style="display: flex; justify-content: flex-start; align-items: center; width: 100%;">
-                                    <p-tag [style]="{ 'padding': '2px 20px' }" [value]="getStockText(product)" [severity]="getSeverity(product)"></p-tag>
-                                </div>
-                            </div>
-
-                            <div class="pt-4">
-                                <div class="flex flex-row justify-content-between align-items-start gap-2">
-                                    <div>
-                                        <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
+    
+                                <div class="pt-4">
+                                    <div class="flex flex-row justify-content-between align-items-start gap-2">
+                                        <div>
+                                            <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
+                                        </div>
+                                        <div class="surface-100 p-1" style="border-radius: 30px">
+                                            <div class="surface-0 flex align-items-center gap-2 justify-content-center py-1 px-2" style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
+                                                <span class="text-900 font-medium text-sm">{{ product.rating }}</span>
+                                                <i class="pi pi-star-fill text-yellow-500"></i>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="surface-100 p-1" style="border-radius: 30px">
-                                        <div class="surface-0 flex align-items-center gap-2 justify-content-center py-1 px-2" style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
-                                            <span class="text-900 font-medium text-sm">{{ product.rating }}</span>
-                                            <i class="pi pi-star-fill text-yellow-500"></i>
+                                    <div class="text-lg font-medium text-900 mt-1" style="min-height: 42px;"> {{ (product.title.length>25) ? (product.title | slice:0:25)+'...':(product.title) }}</div>
+                                    <div class="flex flex-column gap-4 mt-4">
+                                        <span class="text-2xl font-semibold">{{ '$' + product.price }}</span>
+                                        <div class="flex gap-1">
+                                            <p-button [style]="{ 'width': '100%', 'white-space': 'nowrap', 'font-size': '0.9em' }" class="width-full flex-initial w-full" icon="pi pi-shopping-cart" label="Buy Now" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'" />
+                                            <p-button [style]="{ 'font-size': '0.9em' }" icon="pi pi-heart" [outlined]="true" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-lg font-medium text-900 mt-1" style="min-height: 42px;"> {{ (product.title.length>25) ? (product.title | slice:0:25)+'...':(product.title) }}</div>
-                                <div class="flex flex-column gap-4 mt-4">
-                                    <span class="text-2xl font-semibold">{{ '$' + product.price }}</span>
-                                    <div class="flex gap-2">
-                                        <p-button icon="pi pi-shopping-cart" class="flex-auto md:flex-initial white-space-nowrap" label="Buy Now" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'" />
-                                        <p-button icon="pi pi-heart" [outlined]="true" />
+                            </div>
+                        </div>
+                    }
+                    @else {
+                        <div class="col-12 sm:col-6 md:col-4 xl:col-3 p-2" *ngFor="let element of elementsPerPage">
+                            <div class="p-4 md:p-3 sm:pd-2 border-1 surface-border surface-card border-round flex flex-column" style="height: 100%; align-items: stretch; justify-content: space-between;">
+                                <div class="surface-50 flex justify-content-center border-round p-2" style="flex-direction: column;">
+                                    <div style="display: flex; justify-content: center; align-items: center;">
+                                        <p-skeleton class="w-full" height="200px" shape="rectangle"></p-skeleton>
+                                    </div>
+                                </div>
+                    
+                                <div class="pt-4">
+                                    <div class="flex flex-row justify-content-between align-items-start gap-2">
+                                        <div>
+                                            <p-skeleton width="80px" height="15px" shape="rectangle"></p-skeleton>
+                                        </div>
+                                        <div class="surface-100 p-1" style="border-radius: 30px">
+                                            <p-skeleton width="40px" height="20px" shape="rectangle"></p-skeleton>
+                                        </div>
+                                    </div>
+                                    <div class="text-lg font-medium text-900 mt-1" style="min-height: 42px;">
+                                        <p-skeleton width="180px" height="20px" shape="rectangle"></p-skeleton>
+                                    </div>
+                                    <div class="flex flex-column gap-4 mt-4">
+                                        <p-skeleton width="80px" height="25px" shape="rectangle"></p-skeleton>
+                                        <div class="flex gap-1">
+                                            <p-skeleton width="100%" height="40px" shape="rectangle"></p-skeleton>
+                                            <p-skeleton class="w-full" height="40px" shape="rectangle"></p-skeleton>
+                                            <p-skeleton class="w-3" height="40px" shape="rectangle"></p-skeleton>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-
-                        </div>
-                    </div>
+                        </div>                     
+                    }
                 </div>
             </ng-template>
     </p-dataView>

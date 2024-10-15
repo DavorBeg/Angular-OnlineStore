@@ -9,10 +9,12 @@ export class PaginationService {
 
   private skip: number = 0;
   private total: number = 50;
-  private limit: number = 30;
+  private limit: number = 10;
 
-  private default_limit = 30;
+  private default_limit = 10;
   private default_skip = 0;
+
+  isLoading: boolean = true;
 
   public CurrentPage(): number
   {
@@ -23,14 +25,17 @@ export class PaginationService {
   }
 
   pagination$ = new BehaviorSubject<PaginationParameters>({ skip: this.skip, limit: this.limit });
-  total$ = new BehaviorSubject(this.total);
+  // pagination$ = this.paginationSubject.asObservable();
+
+  private totalSubject = new BehaviorSubject(this.total);
+  total$ = this.totalSubject.asObservable();
 
   constructor() 
   { 
 
-
   }
-
+  getPageLimit = () => this.limit;
+  
   getPaginationParameters(): PaginationParameters
   {
     return { skip: this.skip, limit: this.limit } as PaginationParameters;
@@ -40,6 +45,7 @@ export class PaginationService {
   {
     if(newLimit !== this.limit) { this.limit = newLimit; }
     if(newLimit >= this.total) { this.pagination$.next({ skip: 0, limit: this.limit }); return; }
+    this.isLoading = true;
     this.pagination$.next({ skip: this.skip, limit: this.limit });
   }
 
@@ -68,12 +74,12 @@ export class PaginationService {
   {
     if(total < 0) { throw new Error("Total number cant be smaller then 0") }
     this.total = total;
-    this.total$.next(total);
+    this.totalSubject.next(total);
   }
 
   RefreshPagination(): void
   {
-    this.pagination$.next({ skip: this.default_skip, limit: this.default_limit });
+    this.pagination$.next({ skip: this.default_skip, limit: this.limit });
   }
   
 }

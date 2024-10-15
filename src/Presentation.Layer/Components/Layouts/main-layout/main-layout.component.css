@@ -9,7 +9,8 @@
 .mainContainer
 {
     position: relative;
-    width: 80%; 
+    width: 75%; 
+    max-width: 1300px;
     background-color: white; 
     height: auto; 
     min-height: calc(100dvh - 70px); 

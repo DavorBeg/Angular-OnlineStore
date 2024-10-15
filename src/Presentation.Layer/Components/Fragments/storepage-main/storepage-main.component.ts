@@ -1,15 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { Product } from '../../../../Domain.Layer/Entities/Product.model';
 import { DataViewLayoutOptions, DataViewModule } from 'primeng/dataview';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { LayoutModule } from '@angular/cdk/layout';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'storepage-main',
   standalone: true,
-  imports: [DataViewModule, CommonModule, ButtonModule, TagModule],
+  imports: [DataViewModule, CommonModule, ButtonModule, TagModule, SkeletonModule],
   templateUrl: './storepage-main.component.html',
   styleUrl: './storepage-main.component.css'
 })
@@ -19,7 +20,14 @@ export class StorepageMainComponent {
 
   @Input({ required: true }) products: Product[] = [];
 
-  
+  @Input({ required: true }) isLoading: boolean = true;
+  @Input({ required: true }) paginationLimit: number = 10;
+
+  public elementsPerPage: number[] = [];
+  constructor() {
+    this.elementsPerPage = Array(this.paginationLimit).fill(0).map((x,i) => i);
+    
+  }
 
   getSeverity(product: Product) {
     if(product.stock > 10) return 'success';

@@ -2,7 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { StorepageheaderComponent } from "../../Fragments/storepageheader/storepageheader.component";
 import { StorepagefooterComponent } from "../../Fragments/storepagefooter/storepagefooter.component";
 import { StorepageMainComponent } from "../../Fragments/storepage-main/storepage-main.component";
-import { BehaviorSubject, Observable, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription, take, tap } from 'rxjs';
 import { ProductRepositoryService } from '../../../../Infrastructure.Layer/Repositories/Products/product-repository.service';
 import { FilterParameters } from '../../../../Domain.Layer/Shared/Models/FilterParameters.model';
 import { PaginationService } from '../../../../Application.Layer/Services/pagination.service';
@@ -11,6 +11,8 @@ import { ProductCategory } from '../../../../Domain.Layer/Shared/Models/ProductC
 import { Router, ActivatedRoute } from '@angular/router';
 import { Product } from '../../../../Domain.Layer/Entities/Product.model';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { PaginationParameters } from '../../../../Domain.Layer/Shared/Models/PaginationParameters.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-store-page',
@@ -31,17 +33,18 @@ export class StorePageComponent implements OnInit, OnDestroy {
   private searchValue: string | undefined = undefined;
   private selectedCategory: ProductCategory | undefined = undefined;
 
+  private pagination$: Subscription | undefined = undefined;
+
   products$: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
 
-  constructor(private productRepository: ProductRepositoryService, private pagination: PaginationService, private router: Router, private route: ActivatedRoute) {
+  constructor(private productRepository: ProductRepositoryService, public pagination: PaginationService, private router: Router, private route: ActivatedRoute) {
     
   }
 
   ngOnDestroy(): void {
-    this.pagination.pagination$.unsubscribe();
+    this.pagination$?.unsubscribe();
   }
   ngOnInit(): void {
-  
     this.route.queryParams.pipe(
       tap((x) => {
         const filters = x['filters'];
@@ -51,6 +54,7 @@ export class StorePageComponent implements OnInit, OnDestroy {
 
         if(filters)
         {
+
           try
           {
             const paramFiltering = JSON.parse(filters) as FilterParameters[];
@@ -65,30 +69,40 @@ export class StorePageComponent implements OnInit, OnDestroy {
       }),
       take(1)).subscribe();
 
-    this.pagination.pagination$.subscribe((paging) => {
+    this.pagination$ = this.pagination.pagination$.subscribe((paging) => {
+      if(this.searchValue && this.searchValue !== '')
+      {
+        this.productRepository.GetProductsBySearchString(this.searchValue, paging, this.selectedFilters, this.selectedSorting).subscribe((x) => {
+          this.pagination.setNewTotalAmount(x.total);
+          this.products$.next(x.products);
+          this.pagination.isLoading = false;
+        });
+      }
+      if(this.selectedCategory && (this.searchValue == '' || this.searchValue == undefined))
+      {
+        console.log(this.selectedCategory);
+        this.productRepository.GetProductsByCategory(this.selectedCategory.slug, paging, this.selectedFilters, this.selectedSorting).subscribe((x) => {
+          this.pagination.setNewTotalAmount(x.total);
+          this.products$.next(x.products);
+          this.pagination.isLoading = false;
+        });
+      }
+      if((this.searchValue == undefined || this.searchValue === '') && (this.selectedCategory === undefined))
+      {
+        this.productRepository.GetAllProducts(paging, this.selectedFilters, this.selectedSorting).subscribe((x) => {
+          this.pagination.setNewTotalAmount(x.total);
+          this.products$.next(x.products);
+          this.pagination.isLoading = false;
+        });
+      }
+
       this.router.navigate([], {
         relativeTo: this.route,   // Keep the current route
         queryParams: { page: this.pagination.CurrentPage() },  // Update the query parameters
         queryParamsHandling: 'merge',  // Merge with existing query parameters
       });
 
-      this.productRepository.GetAllProducts(paging, this.selectedFilters, this.selectedSorting).subscribe((x) => {
-        this.pagination.setNewTotalAmount(x.total);
-        this.products$.next(x.products);
-      });
-
-      // this.productRepository.GetProductsByCategory("smartphones", undefined, this.selectedFilters, this.selectedSorting).subscribe((x) => {
-      //   this.pagination.setNewTotalAmount(x.total);
-      //   this.products$.next(x.products);
-      // });
-      // this.productRepository.GetProductsBySearchString("phone", newValue, this.selectedFilters, this.selectedSorting).subscribe((x) => {
-      //   this.pagination.setNewTotalAmount(x.total);
-      //   this.products$.next(x.products);
-      // });
-
     });
-
-
   }
 
   filterChanged(newFilters: FilterParameters[])
@@ -108,7 +122,8 @@ export class StorePageComponent implements OnInit, OnDestroy {
 
   productChanged(product: ProductCategory)
   {
-    this.selectedCategory = product;
+    product == null ? this.selectedCategory = undefined : this.selectedCategory = product;
+    this.searchValue = undefined; // Because category changed, I must delte search value
 
     const result = product != undefined ? product.name : null;
     this.router.navigate([], {
@@ -135,7 +150,9 @@ export class StorePageComponent implements OnInit, OnDestroy {
 
   searchChanged(search: string)
   {
-    this.searchValue = search;
+    search == null || search === '' ? this.searchValue = undefined : this.searchValue = search;
+    this.selectedCategory = undefined;
+
     const result = search == '' ? null : search;
     this.router.navigate([], {
       relativeTo: this.route,   // Keep the current route

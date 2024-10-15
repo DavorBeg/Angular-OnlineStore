@@ -40,6 +40,7 @@ export class StorepagefooterComponent {
       behavior: 'instant' 
     });
   }
+
   pageOptionsChanged(event: DropdownChangeEvent): void
   {
     this.selectedLimit = event.value;
